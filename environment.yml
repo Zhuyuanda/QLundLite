@@ -26,6 +26,9 @@ dependencies:
   - networkx>=3.0
   - pyyaml>=6.0
 
+  - jupyter>=1.0
+  - ipykernel>=6.0
+
   - pip:
       - torch-geometric>=2.4
       - uproot>=5.0

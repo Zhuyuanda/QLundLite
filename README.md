@@ -61,6 +61,8 @@ ROOT (AnalysisTree, SRJ_* branches)
   │
   ├─ Step 4  test_make_scores_SRJ.py   run inference, write scores into ROOT
   │
+  ├─ Plot    notebooks/plot_SRJ_scores.ipynb       ROC, score distributions, rejection vs pT
+  │
   ├─ Step 5  weight_ONLY_TRAINS_COMBINER_SRJ.py   (optional) train Combiner MLP
   │
   └─ Step 6  make_scores_combiner_SRJ.py           (optional) combined scoring
@@ -222,12 +224,15 @@ srj-training/
 │       ├── utils_newdata.py              # graph builder, training loops, reweighting
 │       └── quantum_layers.py             # QuantumEdgeConv — PennyLane quantum circuit
 │
+├── notebooks/
+│   └── plot_SRJ_scores.ipynb             # score distributions, ROC, rejection vs pT, correlations
+│
 ├── plotting/
 │   └── utils_plots_matplotlib.py         # histogram-with-error-bars helper
 │
 ├── pyproject.toml                        # makes tools/ and plotting/ pip-installable
-├── requirements.txt                      # pip dependencies (includes pennylane)
-└── environment.yml                       # conda environment (includes pennylane)
+├── requirements.txt                      # pip dependencies (includes pennylane + jupyter)
+└── environment.yml                       # conda environment (includes pennylane + jupyter)
 ```
 
 ---
