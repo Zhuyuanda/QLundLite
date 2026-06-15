@@ -77,10 +77,11 @@ def main():
     t_start = time.time()
 
     # ------------------------
-    # Dataset creation eta cut (more permissive than signal config)
-    # Actual eta cut will be applied in preprocessing
+    # Dataset creation eta cut — taken directly from signal config
     # ------------------------
-    ETA_MIN_FOR_DATASET_CREATION = 3.2  # Change this value as needed
+    ETA_MIN_FOR_DATASET_CREATION = min(
+        config_signal[s].get("eta_min", 0.0) for s in signals
+    )
 
     # ------------------------
     # SRJ jet property mapping

@@ -167,7 +167,7 @@ n_quantum_layers: 2 # variational layers in the circuit
 |-----------|-------|--------|
 | `batch_size` | 512 | fits in typical laptop RAM |
 | `num_workers` | 0 | avoids multiprocessing issues |
-| `event_fractions` | `{0.7: 1, 0.3: 1}` | 70 % train + 30 % test, single chunk |
+| `event_fractions` | `{0.7: 1, 0.3: 1}` | 70% train + 30% test, single chunk |
 | `n_files` | `null` | set to a small int (e.g. `5`) to speed up testing |
 | `gpu` | `null` | auto-detects; falls back to CPU if no GPU found |
 
@@ -193,7 +193,7 @@ n_quantum_layers: 2 # variational layers in the circuit
 | `dsid` | Dataset ID |
 
 Default kinematic selection (`configs/config_signal_SRJ.yaml`):
-pT ∈ [20, 160] GeV, |η| ∈ [3.2, 4.5], ≥ 3 Lund-plane splittings.
+pT ∈ [20, 3200] GeV, η ∈ [2.0, 4.0], ≥ 3 Lund-plane splittings.
 
 ---
 

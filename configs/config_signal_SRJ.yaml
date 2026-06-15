@@ -12,13 +12,13 @@ srj:
   dsids: []        # No DSID-based splitting for SRJ
   skip_dsids: []
 
-  # SRJ jet kinematic cuts (applied in preprocess_SRJ_CPU.py)
-  pt_range: [20, 160]       # GeV
+  # SRJ jet kinematic cuts
+  pt_range: [20, 3200]      # GeV
   mass_range: [0, .inf]
 
   # Absolute eta cut (forward SRJ jets)
-  eta_min: 3.2
-  eta_max: 4.5
+  eta_min: 2.0
+  eta_max: 4.0
 
   # Minimum number of Lund-plane splittings to keep a jet
   min_splits: 3
