@@ -141,7 +141,8 @@ def main():
     # Checkpoint-resume training logic
     if config['retrain']['flag']:
         print(f"Loading checkpoint: {config['retrain']['path_to_ckpt']}")
-        model.load_state_dict(torch.load(config['retrain']['path_to_ckpt']))
+        model.load_state_dict(torch.load(config['retrain']['path_to_ckpt'],
+                                         map_location=device, weights_only=False))
 
     # GPU settings
     if torch.cuda.is_available():
@@ -242,6 +243,10 @@ def main():
         val_loss_total = []
         train_acc = []
         val_acc = []
+        train_jds = []
+        train_bgrej = []
+        val_jds = []
+        val_bgrej = []
         train_jsdbg = []
         val_jsdbg = []
         n_epochs_common = config['architecture']['n_epochs_common']

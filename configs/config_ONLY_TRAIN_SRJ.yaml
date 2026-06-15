@@ -17,7 +17,7 @@ data:
   ln_kT_cut: null
 
   # Mean/std JSON (informational; not re-applied here)
-  meanstd_json: "/path/to/your/output/data_dijet_part20_5.00percent/slice_meanstd_part20.json"
+  meanstd_json: "/path/to/your/output/data_dijet_part0_70.00percent/slice_meanstd_part0.json"
 
 
 # ================================================================

@@ -4,18 +4,20 @@
 # ================================================================
 
 data:
-  # Glob patterns for raw graph .pt files from Make_data_SRJ.py
+  # Glob patterns for raw graph .pt files from Make_data_SRJ.py.
+  # With the default event_fractions {0.7: 1, 0.3: 1}, Make_data_SRJ.py
+  # produces part0 (70 % train) and part1 (30 % test).
   train_graphs:
-    - "/path/to/your/output/data_dijet_part20_5.00percent/graphs_dijet_part20_5.00percent_ln_kT_cut_None_with_pt"
+    - "/path/to/your/output/data_dijet_part0_70.00percent/graphs_dijet_part0_70.00percent_ln_kT_cut_None_with_pt"
 
   test_graphs:
-    - "/path/to/your/output/data_dijet_part21_5.00percent/graphs_dijet_part21_5.00percent_ln_kT_cut_None_with_pt"
+    - "/path/to/your/output/data_dijet_part1_30.00percent/graphs_dijet_part1_30.00percent_ln_kT_cut_None_with_pt"
 
   # Directory where processed_SRJ_train.pt and processed_SRJ_test.pt are saved
   out_dir: "/path/to/your/preprocessed/"
 
-  # Mean/std JSON produced by Make_data_SRJ.py for the train slice
-  meanstd_json: "/path/to/your/output/data_dijet_part20_5.00percent/slice_meanstd_part20.json"
+  # Mean/std JSON produced by Make_data_SRJ.py for the train slice (part0)
+  meanstd_json: "/path/to/your/output/data_dijet_part0_70.00percent/slice_meanstd_part0.json"
 
 
 # ================================================================
