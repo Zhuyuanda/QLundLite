@@ -69,6 +69,22 @@ A ready-to-use dataset is published on Zenodo:
 
 MC16 Pythia8 dijet, ATLAS FTAG1 format. Each file also contains baseline tagger scores (`SRJ_QGScore`, `SRJ_GN3V00_*`) for comparison.
 
+> **Note — JZ slice imbalance.**
+> In the full dataset, DSID 364704 (400–800 GeV) accounts for ~60% of all jets, while
+> 364700–364701 (20–60 GeV) together account for only ~5%. The Zenodo release takes
+> **one file per DSID**, which equalises the per-slice jet counts and distorts the
+> natural pT composition. This has two consequences:
+>
+> 1. **Training**: `preprocess_SRJ_CPU.py` applies pT/η flattening, so training weights
+>    already compensate for pT imbalance. The one-file-per-DSID selection does not bias
+>    the trained model, but reduces effective statistics at 400–800 GeV.
+>
+> 2. **Performance evaluation**: absolute efficiencies and rejection rates computed on
+>    this subset will differ from those on the full dataset, especially in the
+>    400–800 GeV bin. For publication-quality results, use more files from 364703–364704
+>    (which dominate the full dataset) or reweight jets by their physics cross-section
+>    using `metadata.json`.
+
 ---
 
 ## Pipeline
