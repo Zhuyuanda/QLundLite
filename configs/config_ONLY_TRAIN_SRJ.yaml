@@ -30,7 +30,12 @@ architecture:
   save_every_epoch: True
 
   n_epochs: 50
-  choose_model: LundNet   # Options: LundNet, GATNet, GINNet, EdgeGinNet, PNANet, QLundNet
+
+  # Model selection — this repo focuses on quantum exploration:
+  #   QLundNet   hybrid quantum-classical (1st EdgeConv layer replaced by a quantum circuit)
+  #   LundNet    classical baseline (fastest to train, good reference point)
+  #   GATNet / GINNet / EdgeGinNet / PNANet   other classical variants
+  choose_model: QLundNet
 
   # Adversarial mass-decorrelation (optional)
   do_combined_training: False

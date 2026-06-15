@@ -30,5 +30,5 @@ dependencies:
       - torch-geometric>=2.4
       - uproot>=5.0
       - awkward>=2.0
-      # - pennylane>=0.35   # optional: only needed for QLundNet
+      - pennylane>=0.35
       - -e .                # install srj-training package in editable mode

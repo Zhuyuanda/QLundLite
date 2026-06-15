@@ -20,10 +20,8 @@ dependencies = [
     "tqdm>=4.65",
     "networkx>=3.0",
     "pyyaml>=6.0",
+    "pennylane>=0.35",
 ]
-
-[project.optional-dependencies]
-quantum = ["pennylane>=0.35"]
 
 [tool.setuptools.packages.find]
 where = ["."]

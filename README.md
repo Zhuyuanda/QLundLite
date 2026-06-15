@@ -1,18 +1,46 @@
-# SRJ Training
+# SRJ Training — Quantum LundNet
 
-GNN tagger for **Small Radius Jets (SRJ)** using the Lund-plane representation.
-The primary model is **LundNet** — a 6-layer EdgeConv graph neural network that
-learns to separate quark-initiated jets (parton truth labels 1–5) from
-gluon-initiated jets (labels −1, 21) from Lund-plane splittings stored in ATLAS
-AnalysisTree ROOT files.
+A teaching and research repo for exploring **quantum graph neural networks** applied
+to jet tagging in particle physics.
 
-An optional **Combiner** MLP can be trained on top of LundNet + ParT scores.
+The central model is **QLundNet** — a hybrid quantum-classical GNN that replaces the
+first EdgeConv layer of the classical LundNet with a PennyLane quantum circuit.
+It is trained on **Small Radius Jets (SRJ)** represented as Lund-plane graphs to
+separate quark-initiated jets (parton truth labels 1–5) from gluon-initiated jets
+(labels −1, 21), using ATLAS AnalysisTree ROOT files.
+
+The classical **LundNet** baseline is also included as a reference point.
 
 Designed to run **on a laptop, CPU-only, with a small QCD dataset**.
 
 ---
 
-## Pipeline at a glance
+## What is QLundNet?
+
+```
+Lund-plane graph (nodes = splittings, edges = parent links)
+        │
+        ▼  QuantumEdgeConv  (layer 1)   ← quantum circuit (PennyLane)
+        │     encodes pairs of node features into a variational quantum circuit
+        │     and reads out expectation values as new node embeddings
+        │
+        ▼  EdgeConv ×5                  ← classical layers 2–6
+        │
+        ▼  Global mean-pool
+        │
+        ▼  Ntrk concatenation + MLP → sigmoid score ∈ [0, 1]
+```
+
+The quantum circuit uses `n_qubits` qubits and `n_quantum_layers` variational
+layers (default: 4 qubits, 2 layers). These are the main hyperparameters to
+explore in student projects.
+
+The classical LundNet has the same architecture but with a standard EdgeConv
+in all six layers — a natural baseline to compare against QLundNet.
+
+---
+
+## Pipeline
 
 ```
 ROOT (AnalysisTree, SRJ_* branches)
@@ -21,7 +49,7 @@ ROOT (AnalysisTree, SRJ_* branches)
   │
   ├─ Step 2  preprocess_SRJ_CPU.py     standardise node features, flatten pT/η weights
   │
-  ├─ Step 3  weight_ONLY_TRAINS_SRJ.py train LundNet, save .pt checkpoints
+  ├─ Step 3  weight_ONLY_TRAINS_SRJ.py train QLundNet (or LundNet), save .pt checkpoints
   │
   ├─ Step 4  test_make_scores_SRJ.py   run inference, write scores into ROOT
   │
@@ -37,17 +65,17 @@ ROOT (AnalysisTree, SRJ_* branches)
 ### Option A — conda (recommended)
 
 ```bash
-conda env create -f environment.yml   # creates env + runs pip install -e . automatically
+conda env create -f environment.yml   # creates env, installs all deps + pip install -e .
 conda activate srj-training
 ```
 
 ### Option B — pip
 
 ```bash
-# 1. Install CPU-only PyTorch
+# 1. CPU-only PyTorch
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
 
-# 2. Install torch-geometric and other deps
+# 2. torch-geometric + all other deps (including pennylane)
 pip install torch_geometric
 pip install -r requirements.txt
 
@@ -56,108 +84,105 @@ pip install -e .
 ```
 
 > **torch-geometric note:** if pip install fails, follow the
-> [official PyG installation guide](https://pytorch-geometric.readthedocs.io/en/latest/install/installation.html)
-> or use the conda route above.
+> [official PyG guide](https://pytorch-geometric.readthedocs.io/en/latest/install/installation.html)
+> or use the conda route.
 
 ### GPU (optional)
 
-Replace `cpuonly` in `environment.yml` with `pytorch-cuda=12.1` (adjust to your driver),
-or change the PyTorch pip index URL to the CUDA variant.
-
-### QLundNet (optional)
-
-Only needed when `choose_model: QLundNet`:
-
-```bash
-pip install -e ".[quantum]"
-```
+Replace `cpuonly` in `environment.yml` with `pytorch-cuda=12.1` (adjust to your
+driver), or change the pip index URL to the CUDA variant. PennyLane's default
+simulator (`default.qubit`) runs on CPU; GPU acceleration for the quantum layers
+requires a PennyLane plugin (e.g. `pennylane-lightning-gpu`).
 
 ---
 
 ## Quick start
 
-### 1. Configure paths
+### 1. Set your paths
 
-Every config file in `configs/` contains `/path/to/your/...` placeholders.
-Replace them with your actual paths before running. The table below shows what
-each step needs:
+Every config in `configs/` contains `/path/to/your/...` placeholders. Replace them
+with real paths before running:
 
-| Step | Config | Key fields to set |
-|------|--------|-------------------|
+| Step | Config | Fields to set |
+|------|--------|---------------|
 | 1 | `config_make_data_SRJ.yaml` | `path_to_rootfiles`, `out_dir` |
 | 2 | `config_preprocess_SRJ.yaml` | `data.train_graphs`, `data.test_graphs`, `data.out_dir`, `data.meanstd_json` |
 | 3 | `config_ONLY_TRAIN_SRJ.yaml` | `data.path_to_trainfiles`, `data.path_to_save` |
 | 4 | `config_make_scores_SRJ.yaml` | `data.paths_to_test_file_root`, `data.paths_to_test_file_graphs`, `data.path_to_outdir`, `test.models_to_run[].ckpt` |
 
-> Any field can be overridden at the command line with `--override key=value` (dot-notation for nested keys):
-> ```bash
-> python Make_data_SRJ.py configs/config_make_data_SRJ.yaml --override out_dir=/tmp/out n_files=3
-> ```
-
-### 2. Concrete example (small QCD dataset)
-
-The path names below show how each step's outputs feed into the next.
+Any field can be overridden at the command line:
 
 ```bash
-# Step 1 — build graphs
-#   reads:  /data/qcd/*.root  (AnalysisTree)
-#   writes: /out/data_qcd_part0_70.00percent/graphs_qcd_part0_70.00percent_ln_kT_cut_None_with_pt
-#           /out/data_qcd_part0_70.00percent/data_qcd_part0_70.00percent_ln_kT_cut_None.root
-#           /out/data_qcd_part0_70.00percent/slice_meanstd_part0.json
-#           /out/data_qcd_part1_30.00percent/...  (test chunk)
+python Make_data_SRJ.py configs/config_make_data_SRJ.yaml \
+    --override out_dir=/tmp/out n_files=3
+```
+
+### 2. Run
+
+```bash
+# Step 1 — build Lund-plane graphs from ROOT
 python Make_data_SRJ.py configs/config_make_data_SRJ.yaml
 
-# Step 2 — preprocess (standardise + flatten pT/η)
-#   reads:  graphs from step 1 + slice_meanstd_part0.json
-#   writes: /out/preprocessed/processed_SRJ_train.pt
-#           /out/preprocessed/processed_SRJ_test.pt
-#           /out/preprocessed/plots_before_after/  (diagnostic plots)
+# Step 2 — standardise + flatten pT/η
 python preprocess_SRJ_CPU.py configs/config_preprocess_SRJ.yaml
 
-# Step 3 — train LundNet
-#   reads:  /out/preprocessed/processed_SRJ_train.pt
-#   writes: /out/training/LundNet_dijet_ln_kT_cut_None_e001_0.XXXXX.pt  (per epoch)
-#           /out/training/losses_LundNet_..._DDMM-HHMM.txt
+# Step 3 — train QLundNet (default) or LundNet
 python weight_ONLY_TRAINS_SRJ.py configs/config_ONLY_TRAIN_SRJ.yaml
 
-# Step 4 — score
-#   reads:  /out/preprocessed/processed_SRJ_test.pt + best checkpoint from step 3
-#   writes: /out/scores/Final_Scores_test_kTNone.root  (with fjet_LundNet_SRJ_score branch)
+# Step 4 — write scores to ROOT
 python test_make_scores_SRJ.py configs/config_make_scores_SRJ.yaml
+```
+
+### 3. Switch between models
+
+In `configs/config_ONLY_TRAIN_SRJ.yaml`:
+
+```yaml
+choose_model: QLundNet   # quantum-classical hybrid  ← default
+# choose_model: LundNet  # classical baseline
+```
+
+To change the quantum circuit size:
+```yaml
+# (add under architecture:)
+n_qubits: 4         # number of qubits per circuit
+n_quantum_layers: 2 # variational layers in the circuit
 ```
 
 ---
 
 ## Laptop defaults
 
-All configs are pre-tuned for laptop use:
-
-| Parameter | Value | Why |
-|-----------|-------|-----|
+| Parameter | Value | Reason |
+|-----------|-------|--------|
 | `batch_size` | 512 | fits in typical laptop RAM |
 | `num_workers` | 0 | avoids multiprocessing issues |
-| `event_fractions` | `{0.7: 1, 0.3: 1}` | one 70% train chunk + one 30% test chunk |
-| `n_files` | `null` (= all) | set to a small int (e.g. `5`) to limit I/O |
-| `gpu` | `null` | auto-detects; falls back to CPU if no GPU |
+| `event_fractions` | `{0.7: 1, 0.3: 1}` | 70 % train + 30 % test, single chunk |
+| `n_files` | `null` | set to a small int (e.g. `5`) to speed up testing |
+| `gpu` | `null` | auto-detects; falls back to CPU if no GPU found |
+
+> **QLundNet training speed:** the quantum simulation layer is slower than classical
+> EdgeConv. With `n_qubits=4` and `n_quantum_layers=2`, expect roughly 5–20× slower
+> per-epoch time compared to LundNet on CPU. Reduce `n_epochs` (e.g. to `10`) and
+> `batch_size` (e.g. to `128`) for exploratory runs.
 
 ---
 
 ## Input data format
 
 `Make_data_SRJ.py` reads ROOT files with an `AnalysisTree` tree.
-Required branches:
 
 | Branch | Description |
 |--------|-------------|
 | `SRJ_pt`, `SRJ_eta`, `SRJ_phi`, `SRJ_mass` | Jet kinematics |
-| `SRJ_partonTruthLabel` | Truth label (signal quarks: 1–5; background gluons: −1, 21) |
+| `SRJ_partonTruthLabel` | Truth label (quarks 1–5 = signal; gluons −1, 21 = background) |
 | `SRJ_Nconst`, `SRJ_Nconst_Charged` | Constituent multiplicity |
-| `SRJ_jetLundZ`, `SRJ_jetLundKt`, `SRJ_jetLundDeltaR` | Lund-plane node features |
+| `SRJ_jetLundZ`, `SRJ_jetLundKt`, `SRJ_jetLundDeltaR` | Lund-plane node features (z, kT, ΔR) |
 | `SRJ_jetLundIDParent1`, `SRJ_jetLundIDParent2` | Parent-node indices (graph edges) |
 | `mcEventWeight` | Per-event MC weight |
 | `dsid` | Dataset ID |
 
-Default kinematic selection (in `configs/config_signal_SRJ.yaml`):
+Default kinematic selection (`configs/config_signal_SRJ.yaml`):
 pT ∈ [20, 160] GeV, |η| ∈ [3.2, 4.5], ≥ 3 Lund-plane splittings.
 
 ---
@@ -168,16 +193,16 @@ pT ∈ [20, 160] GeV, |η| ∈ [3.2, 4.5], ≥ 3 Lund-plane splittings.
 srj-training/
 ├── Make_data_SRJ.py                      # Step 1: ROOT → PyG graphs
 ├── preprocess_SRJ_CPU.py                 # Step 2: standardise + flatten
-├── weight_ONLY_TRAINS_SRJ.py             # Step 3: train LundNet
+├── weight_ONLY_TRAINS_SRJ.py             # Step 3: train QLundNet / LundNet
 ├── test_make_scores_SRJ.py               # Step 4: inference → ROOT
-├── weight_ONLY_TRAINS_COMBINER_SRJ.py    # Step 5: train Combiner MLP (optional)
-├── make_scores_combiner_SRJ.py           # Step 6: combined inference (optional)
+├── weight_ONLY_TRAINS_COMBINER_SRJ.py    # Step 5: Combiner MLP (optional)
+├── make_scores_combiner_SRJ.py           # Step 6: combined scoring (optional)
 │
 ├── configs/
 │   ├── config_signal_SRJ.yaml            # truth-label & kinematic selection
 │   ├── config_make_data_SRJ.yaml         # Step 1
 │   ├── config_preprocess_SRJ.yaml        # Step 2
-│   ├── config_ONLY_TRAIN_SRJ.yaml        # Step 3
+│   ├── config_ONLY_TRAIN_SRJ.yaml        # Step 3  (choose_model: QLundNet by default)
 │   ├── config_make_scores_SRJ.yaml       # Step 4
 │   ├── config_ONLY_TRAIN_COMBINER_SRJ.yaml    # Step 5 (optional)
 │   └── config_make_scores_combiner_SRJ.yaml   # Step 6 (optional)
@@ -185,29 +210,38 @@ srj-training/
 ├── tools/
 │   ├── utils_config.py                   # YAML recursive-update + dot-arg CLI parser
 │   └── GNN_model_weight/
-│       ├── models.py                     # LundNet, GATNet, GINNet, Combiner, …
+│       ├── models.py                     # QLundNet, LundNet, GATNet, GINNet, Combiner, …
 │       ├── utils_newdata.py              # graph builder, training loops, reweighting
-│       └── quantum_layers.py             # PennyLane layers for QLundNet (optional)
+│       └── quantum_layers.py             # QuantumEdgeConv — PennyLane quantum circuit
 │
 ├── plotting/
 │   └── utils_plots_matplotlib.py         # histogram-with-error-bars helper
 │
 ├── pyproject.toml                        # makes tools/ and plotting/ pip-installable
-├── requirements.txt
-└── environment.yml
+├── requirements.txt                      # pip dependencies (includes pennylane)
+└── environment.yml                       # conda environment (includes pennylane)
 ```
 
 ---
 
-## Available models
+## Model reference
 
-Set `choose_model` in `configs/config_ONLY_TRAIN_SRJ.yaml`:
-
-| Value | Description |
-|-------|-------------|
-| `LundNet` | **Default.** 6-layer EdgeConv GNN with skip connections and Ntrk input |
+| `choose_model` | Description |
+|----------------|-------------|
+| `QLundNet` | **Default.** Hybrid quantum-classical: quantum circuit for layer 1, classical EdgeConv for layers 2–6 |
+| `LundNet` | Classical baseline: all 6 layers are EdgeConv |
 | `GATNet` | Graph Attention Network |
 | `GINNet` | Graph Isomorphism Network |
 | `EdgeGinNet` | Hybrid EdgeConv + GIN |
 | `PNANet` | Principal Neighbourhood Aggregation |
-| `QLundNet` | Hybrid quantum-classical LundNet (requires `pip install -e ".[quantum]"`) |
+
+---
+
+## Project ideas for students
+
+- Compare QLundNet vs LundNet ROC curves and AUC as a function of training set size
+- Vary `n_qubits` (2, 4, 6, 8) and `n_quantum_layers` (1, 2, 3) — how does expressivity change?
+- Try different PennyLane ansätze in `tools/GNN_model_weight/quantum_layers.py`
+- Replace only selected EdgeConv layers with quantum circuits and measure the trade-off
+- Study convergence speed: does the quantum layer need more or fewer epochs?
+- Adversarial mass-decorrelation with QLundNet (`do_combined_training: True`)
