@@ -1,114 +1,111 @@
 {
-  "_comment": "MC16 dijet Pythia8 samples (DSIDs 364700-364712). Cross-sections from PMGxsecDB_mc16.txt. sumWeights filled where known; entries marked null must be measured from your local ROOT files (sum of mcEventWeight over all events).",
+  "_comment": "MC16 dijet Pythia8 samples (DSIDs 364700-364712). weight_factor = xsec_pb * genFiltEff * kfactor / sumWeights, pre-computed from actual data files. Use weight_factor * mcEventWeight as the per-jet physics weight.",
   "by_dsid": {
     "364700": {
-      "cross_section_pb": 78050000000.0,
-      "genFiltEff": 0.9753257,
+      "cross_section_pb": 78420000000.0,
+      "genFiltEff": 0.97557,
       "kfactor": 1.0,
       "sumWeights": 450000.0,
-      "nEvents": 450000,
-      "etag": "e7142",
+      "weight_factor": 170009.332,
       "description": "JZ0W: pT 0-20 GeV"
     },
     "364701": {
-      "cross_section_pb": 78050000000.0,
-      "genFiltEff": 0.02442497,
+      "cross_section_pb": 78420000000.0,
+      "genFiltEff": 0.024162,
       "kfactor": 1.0,
       "sumWeights": 440000.0,
-      "nEvents": 440000,
-      "etag": "e7142",
+      "weight_factor": 4306.327363636364,
       "description": "JZ1W: pT 20-60 GeV"
     },
     "364702": {
-      "cross_section_pb": 2433000000.0,
-      "genFiltEff": 0.009863128,
+      "cross_section_pb": 2432800000.0,
+      "genFiltEff": 0.0098225,
       "kfactor": 1.0,
       "sumWeights": 151.1152745216136,
-      "nEvents": 410000,
-      "etag": "e7142",
+      "weight_factor": 158132.11520574774,
       "description": "JZ2W: pT 60-160 GeV"
     },
     "364703": {
-      "cross_section_pb": 26450000.0,
-      "genFiltEff": 0.01165833,
+      "cross_section_pb": 26452000.0,
+      "genFiltEff": 0.011653,
       "kfactor": 1.0,
-      "sumWeights": null,
-      "etag": "e7142",
+      "sumWeights": 24.124114769654568,
+      "weight_factor": 12777.470134893318,
       "description": "JZ3W: pT 160-400 GeV"
     },
     "364704": {
       "cross_section_pb": 254610.0,
-      "genFiltEff": 0.01336553,
+      "genFiltEff": 0.013358,
       "kfactor": 1.0,
-      "sumWeights": null,
-      "etag": "e7142",
+      "sumWeights": 0.6689032716609136,
+      "weight_factor": 5084.5623337362085,
       "description": "JZ4W: pT 400-800 GeV"
     },
     "364705": {
-      "cross_section_pb": 4553.2,
-      "genFiltEff": 0.01452648,
+      "cross_section_pb": 4553.5,
+      "genFiltEff": 0.014513,
       "kfactor": 1.0,
-      "sumWeights": null,
-      "etag": "e7142",
+      "sumWeights": 0.021711071504255608,
+      "weight_factor": 3043.8362052764937,
       "description": "JZ5W: pT 800-1300 GeV"
     },
     "364706": {
-      "cross_section_pb": 257.54,
-      "genFiltEff": 0.0094734,
+      "cross_section_pb": 257.56,
+      "genFiltEff": 0.0094451,
       "kfactor": 1.0,
-      "sumWeights": null,
-      "etag": "e7142",
+      "sumWeights": 0.0005569217145566935,
+      "weight_factor": 4368.0824295680395,
       "description": "JZ6W: pT 1300-1800 GeV"
     },
     "364707": {
-      "cross_section_pb": 16.215,
-      "genFiltEff": 0.011099,
+      "cross_section_pb": 16.214,
+      "genFiltEff": 0.011092,
       "kfactor": 1.0,
-      "sumWeights": null,
-      "etag": "e7142",
+      "sumWeights": 7.647190915207464e-05,
+      "weight_factor": 2351.7876040253254,
       "description": "JZ7W: pT 1800-2500 GeV"
     },
     "364708": {
-      "cross_section_pb": 0.62506,
-      "genFiltEff": 0.010156,
+      "cross_section_pb": 0.6254500000000001,
+      "genFiltEff": 0.010228,
       "kfactor": 1.0,
-      "sumWeights": null,
-      "etag": "e7142",
+      "sumWeights": 2.2289720308783095e-05,
+      "weight_factor": 286.9978856342702,
       "description": "JZ8W: pT 2500-3200 GeV"
     },
     "364709": {
-      "cross_section_pb": 0.019639,
-      "genFiltEff": 0.012057,
+      "cross_section_pb": 0.019619,
+      "genFiltEff": 0.012308,
       "kfactor": 1.0,
-      "sumWeights": null,
-      "etag": "e7142",
+      "sumWeights": 4.284172977649797e-06,
+      "weight_factor": 56.36342259281638,
       "description": "JZ9W: pT 3200-3900 GeV"
     },
     "364710": {
-      "cross_section_pb": 0.0011962,
-      "genFiltEff": 0.005894,
+      "cross_section_pb": 0.0011964999999999999,
+      "genFiltEff": 0.0058854,
       "kfactor": 1.0,
-      "sumWeights": null,
-      "etag": "e7142",
+      "sumWeights": 8.032928132152561e-07,
+      "weight_factor": 8.766269265890974,
       "description": "JZ10W: pT 3900-4600 GeV"
     },
     "364711": {
-      "cross_section_pb": 4.2263e-05,
-      "genFiltEff": 0.0026734,
+      "cross_section_pb": 4.2246e-05,
+      "genFiltEff": 0.0026517,
       "kfactor": 1.0,
-      "sumWeights": null,
-      "etag": "e7142",
+      "sumWeights": 4.2650239492989656e-07,
+      "weight_factor": 0.262656715487877,
       "description": "JZ11W: pT 4600-5300 GeV"
     },
     "364712": {
-      "cross_section_pb": 1.0367e-06,
-      "genFiltEff": 0.00042898,
+      "cross_section_pb": 1.0366e-06,
+      "genFiltEff": 0.00042964,
       "kfactor": 1.0,
-      "sumWeights": null,
-      "etag": "e7142",
+      "sumWeights": 2.466817687713993e-07,
+      "weight_factor": 0.0018054225337289552,
       "description": "JZ12W: pT > 5300 GeV"
     }
   },
   "campaign": "mc16",
-  "source": "PMGxsecDB_mc16.txt + local sumWeights from data files"
+  "source": "PMGxsecDB_mc16.txt + actual sumWeights from data files"
 }
