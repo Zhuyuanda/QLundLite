@@ -33,5 +33,6 @@ dependencies:
       - torch-geometric>=2.4
       - uproot>=5.0
       - awkward>=2.0
-      - pennylane>=0.35
+      - pennylane>=0.35,<0.40
+      - autoray>=0.6.7,<0.7    # autoray>=0.8 removes NumpyMimic, breaking pennylane 0.35-0.39
       - -e .                # install srj-training package in editable mode

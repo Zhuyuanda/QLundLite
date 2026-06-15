@@ -25,7 +25,9 @@ networkx>=3.0
 pyyaml>=6.0
 
 # Quantum layers (required for QLundNet)
-pennylane>=0.35
+# autoray must be pinned: >=0.8 removes NumpyMimic which pennylane 0.35-0.39 requires
+pennylane>=0.35,<0.40
+autoray>=0.6.7,<0.7
 
 # Notebooks
 jupyter>=1.0

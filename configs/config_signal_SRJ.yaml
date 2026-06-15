@@ -16,9 +16,9 @@ srj:
   pt_range: [20, 3200]      # GeV
   mass_range: [0, .inf]
 
-  # Absolute eta cut (forward SRJ jets)
-  eta_min: 2.0
-  eta_max: 4.0
+  # Absolute eta cut
+  eta_min: 0.0
+  eta_max: 4.5
 
   # Minimum number of Lund-plane splittings to keep a jet
   min_splits: 3

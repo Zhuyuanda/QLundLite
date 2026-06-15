@@ -48,6 +48,29 @@ as the natural performance baseline.
 
 ---
 
+## Dataset
+
+A ready-to-use dataset is published on Zenodo:
+
+> **QLundLite: Small Radius Jet Dataset for Quantum Lund Network Training**
+> DOI: [10.5281/zenodo.20704888](https://doi.org/10.5281/zenodo.20704888)
+> 8 ROOT files (one per JZ slice, DSIDs 364700–364707) · 11.5 GB total
+
+| File | DSID | pT range (dominant) |
+|------|------|---------------------|
+| `dijet_JZ_364700.root` | 364700 | 20–60 GeV |
+| `dijet_JZ_364701.root` | 364701 | 20–60 GeV |
+| `dijet_JZ_364702.root` | 364702 | 60–160 GeV |
+| `dijet_JZ_364703.root` | 364703 | 160–400 GeV |
+| `dijet_JZ_364704.root` | 364704 | 400–800 GeV |
+| `dijet_JZ_364705.root` | 364705 | 800–1300 GeV |
+| `dijet_JZ_364706.root` | 364706 | 1300–1800 GeV |
+| `dijet_JZ_364707.root` | 364707 | 1800–2500 GeV |
+
+MC16 Pythia8 dijet, ATLAS FTAG1 format. Each file also contains baseline tagger scores (`SRJ_QGScore`, `SRJ_GN3V00_*`) for comparison.
+
+---
+
 ## Pipeline
 
 ```
@@ -193,7 +216,7 @@ n_quantum_layers: 2 # variational layers in the circuit
 | `dsid` | Dataset ID |
 
 Default kinematic selection (`configs/config_signal_SRJ.yaml`):
-pT ∈ [20, 3200] GeV, η ∈ [2.0, 4.0], ≥ 3 Lund-plane splittings.
+pT ∈ [20, 3200] GeV, |η| ≤ 4.5, ≥ 3 Lund-plane splittings.
 
 ---
 
