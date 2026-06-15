@@ -30,10 +30,13 @@ def main():
         choices=["true", "false", "yes", "no", "1", "0"],
         help="value can be true/false, yes/no, 0/1, case insensitive"
     )
+    add_arg('--override', nargs='*', default=[], help='Overrides in the form key.subkey=value')
     args = parser.parse_args()
 
     config_file = args.config
     config = load_yaml(config_file)
+    from tools.utils_config import recursive_update, parse_dot_args
+    config = recursive_update(config, parse_dot_args(args.override))
     path_to_save = config['data']['path_to_save']
     os.makedirs(path_to_save, exist_ok=True)
     

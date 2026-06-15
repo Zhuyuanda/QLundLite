@@ -36,6 +36,11 @@ flatten_eta: True
 n_bins_pt: 100
 n_bins_eta: 50
 
+# Flattening algorithm:
+#   False (default) — histogram-based 2-D reweighting, O(N), fast, laptop-friendly
+#   True            — KDE-based (original), O(N²), only feasible for N < ~50k
+use_kde: False
+
 
 # ================================================================
 # Compute resources
