@@ -49,24 +49,40 @@ ROOT files (AnalysisTree, SRJ_* branches)
 
 ## Installation
 
-### Recommended: conda (handles PyTorch + torch-geometric cleanly)
+### Step 1 — Create the environment
+
+**Option A: conda (recommended — handles PyTorch + torch-geometric cleanly)**
 
 ```bash
 conda env create -f environment.yml
 conda activate srj-training
 ```
 
-### Alternative: pip
+**Option B: pip**
 
 ```bash
+# CPU-only PyTorch (laptop default)
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
 pip install torch_geometric
 pip install -r requirements.txt
 ```
 
-> **Note:** `torch-geometric` can sometimes be tricky to install via pip alone.
-> If you get errors, try the conda route or follow the
+> **Note:** `torch-geometric` can be tricky to install via pip alone.
+> If you hit errors, try the conda route or the
 > [official PyG installation guide](https://pytorch-geometric.readthedocs.io/en/latest/install/installation.html).
+
+### Step 2 — Install the package (required)
+
+After activating the environment, install the repo itself so that the
+`tools` and `plotting` modules can be imported from anywhere:
+
+```bash
+cd srj-training
+pip install -e .
+```
+
+This registers `tools` and `plotting` as packages. Without this step the
+scripts can only be run from the repo root directory.
 
 ### Optional: QLundNet (quantum layers)
 
@@ -74,6 +90,7 @@ Only needed if you set `choose_model: QLundNet` in the training config:
 
 ```bash
 pip install pennylane
+# or: pip install -e ".[quantum]"
 ```
 
 ---

@@ -31,3 +31,4 @@ dependencies:
       - uproot>=5.0
       - awkward>=2.0
       # - pennylane>=0.35   # optional: only needed for QLundNet
+      - -e .                # install srj-training package in editable mode
