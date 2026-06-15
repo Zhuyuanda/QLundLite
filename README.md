@@ -32,11 +32,19 @@ Lund-plane graph (nodes = splittings, edges = parent links)
 ```
 
 The quantum circuit uses `n_qubits` qubits and `n_quantum_layers` variational
-layers (default: 4 qubits, 2 layers). These are the main hyperparameters to
-explore in student projects.
+layers (default: 4 qubits, 2 layers).
 
-The classical LundNet has the same architecture but with a standard EdgeConv
-in all six layers — a natural baseline to compare against QLundNet.
+> **Current status — work in progress.**
+> Only the first EdgeConv layer has been replaced by a quantum circuit.
+> Replacing more layers was found to make training prohibitively slow on
+> classical simulators, so the hybrid single-layer design is used for now.
+> A fully quantum architecture remains an open direction for future work.
+> One natural starting point for student projects is to experiment with
+> replacing different layers, or using faster PennyLane backends
+> (e.g. `lightning.qubit`).
+
+The classical **LundNet** uses standard EdgeConv in all six layers and serves
+as the natural performance baseline.
 
 ---
 
