@@ -38,4 +38,4 @@ n_bins_eta: 50
 # ================================================================
 # Compute resources
 # ================================================================
-num_workers: 4
+num_workers: 0  # 0 is safest on laptops; increase to 2-4 on multi-core machines

@@ -1,7 +1,6 @@
 name: srj-training
 channels:
   - pytorch
-  - nvidia
   - pyg
   - conda-forge
   - defaults
@@ -9,13 +8,13 @@ dependencies:
   - python=3.10
   - pip
 
-  # PyTorch (choose the CUDA variant appropriate for your hardware)
-  # CPU-only:
+  # PyTorch CPU-only (laptop default)
   - pytorch::pytorch>=2.0
   - pytorch::cpuonly
-  # GPU (CUDA 12.x) — uncomment and remove cpuonly if using GPU:
+
+  # To use a GPU instead, remove the two lines above and uncomment:
   # - pytorch::pytorch>=2.0
-  # - pytorch::pytorch-cuda=12.1
+  # - pytorch::pytorch-cuda=12.1   # adjust CUDA version to match your driver
 
   # Core scientific stack
   - numpy>=1.24
@@ -28,7 +27,7 @@ dependencies:
   - pyyaml>=6.0
 
   - pip:
-    - torch-geometric>=2.4
-    - uproot>=5.0
-    - awkward>=2.0
-    # Optional: pennylane>=0.35  # for QLundNet only
+      - torch-geometric>=2.4
+      - uproot>=5.0
+      - awkward>=2.0
+      # - pennylane>=0.35   # optional: only needed for QLundNet

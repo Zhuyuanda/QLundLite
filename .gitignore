@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.eggs/
+*.so
+
+# Virtual environments
+.venv/
+venv/
+env/
+.conda/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data files (large, not tracked)
+*.pt
+*.root
+*.h5
+*.hdf5
+*.npz
+*.npy
+
+# Normalisation stats (auto-generated)
+slice_meanstd_*.json
+
+# Model checkpoints (auto-generated)
+*.ckpt
+
+# Training outputs
+losses_*.txt
+validation_losses.txt
+plots_before_after/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp

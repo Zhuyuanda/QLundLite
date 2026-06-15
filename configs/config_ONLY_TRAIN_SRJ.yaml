@@ -24,7 +24,7 @@ data:
 # Architecture and training
 # ================================================================
 architecture:
-  batch_size: 4096
+  batch_size: 512         # Laptop-friendly; increase (e.g. 4096) if you have more RAM/GPU
   test_size: 0.1          # Fraction of data used for validation
   learning_rate: 0.0004
   save_every_epoch: True
@@ -53,5 +53,5 @@ retrain:
 # ================================================================
 # Computing resources
 # ================================================================
-gpu: null       # null = auto-select first available GPU; set to int (0,1,...) to pin
-num_workers: 4
+gpu: null       # null = auto-select first available GPU (falls back to CPU if none found)
+num_workers: 0  # 0 is safest on laptops; increase to 2-4 on machines with many cores

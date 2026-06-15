@@ -34,7 +34,7 @@ model:
 # ================================================================
 training:
   n_epochs: 100
-  batch_size: 4096
+  batch_size: 512         # Laptop-friendly; increase if you have more RAM
   learning_rate: 0.001
   validation_fraction: 0.1
 
@@ -51,5 +51,5 @@ output:
 # Computing resources
 # ================================================================
 gpu: null
-num_workers: 4
+num_workers: 0
 seed: 42

@@ -10,19 +10,18 @@ path_to_rootfiles:
 - "/path/to/your/dijet/sample1/*.root"
 - "/path/to/your/dijet/sample2/*.root"
 
-# Limit total number of input files (null = use all)
+# Limit total number of input files (null = use all).
+# On a laptop, set this to a small number (e.g. 5) for a quick test.
 n_files: null
 
-# How to split events across array jobs.
+# How to split events into train / test chunks.
 # Keys: fraction of events per chunk; Values: number of chunks.
-# The fractions are applied sequentially: chunk i gets events
-#   [sum(prev_fractions), sum(prev_fractions) + fraction].
 # Total fraction must not exceed 1.0.
-# Example below creates 10×1% + 10×2% + 14×5% = 100% slices.
-event_fractions: {0.01: 10, 0.02: 10, 0.05: 14}
+# Default below: one 70%-chunk (train) + one 30%-chunk (test).
+event_fractions: {0.7: 1, 0.3: 1}
 
 # Run only one fraction index (null = run all).
-# Set to an integer when submitting array jobs (0-indexed).
+# Set to 0 for the train chunk, 1 for the test chunk.
 event_fraction_idx: null
 
 # Output directory template.
