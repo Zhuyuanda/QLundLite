@@ -1,0 +1,44 @@
+# ================================================================
+# Inference config for SRJ — LundNet scoring
+# ================================================================
+
+# ================================================================
+# Data and output paths
+# ================================================================
+data:
+  # Single ROOT file (or glob pattern) with jet metadata from Make_data_SRJ.py
+  paths_to_test_file_root: "/path/to/your/output/data_dijet_test/data_dijet_test_ln_kT_cut_None.root"
+
+  # Preprocessed graph .pt file(s) from preprocess_SRJ_CPU.py
+  paths_to_test_file_graphs: "/path/to/your/preprocessed/processed_SRJ_test.pt"
+
+  # Output directory (supports {sample} placeholder)
+  path_to_outdir: "/path/to/your/scores/{sample}/"
+
+  output_suffix: "_score_MultiModel"
+  sample: "test"
+  kT_cut: null
+
+
+# ================================================================
+# Model evaluation settings
+# ================================================================
+test:
+
+  models_to_run:
+
+    # Uncomment and fill in your trained checkpoints.
+    # Each entry produces a separate score branch in the output ROOT file.
+
+    # - tag: "LundNet_v1"
+    #   arch: "LundNet"
+    #   ckpt: "/path/to/your/training_output/LundNet_dijet_ln_kT_cut_None_e050_0.XXXXX.pt"
+
+    - tag: "LundNet_SRJ"
+      arch: "LundNet"
+      ckpt: "/path/to/your/training_output/LundNet_dijet_ln_kT_cut_None_e050_0.XXXXX.pt"
+
+  # ROOT branch name template (tag substituted per model)
+  scores_branch_name: "fjet_{tag}_score"
+
+  batch_size: 2048

@@ -1,0 +1,48 @@
+# ================================================================
+# Make-data config for SRJ
+# Converts ROOT AnalysisTree files → PyTorch Geometric graphs
+# ================================================================
+
+# Glob patterns for input ROOT files (AnalysisTree, SRJ branches).
+# Add as many entries as needed; each entry is expanded with glob.glob().
+# NOTE: it is assumed all data in a single file has the same DSID.
+path_to_rootfiles:
+- "/path/to/your/dijet/sample1/*.root"
+- "/path/to/your/dijet/sample2/*.root"
+
+# Limit total number of input files (null = use all)
+n_files: null
+
+# How to split events across array jobs.
+# Keys: fraction of events per chunk; Values: number of chunks.
+# The fractions are applied sequentially: chunk i gets events
+#   [sum(prev_fractions), sum(prev_fractions) + fraction].
+# Total fraction must not exceed 1.0.
+# Example below creates 10×1% + 10×2% + 14×5% = 100% slices.
+event_fractions: {0.01: 10, 0.02: 10, 0.05: 14}
+
+# Run only one fraction index (null = run all).
+# Set to an integer when submitting array jobs (0-indexed).
+event_fraction_idx: null
+
+# Output directory template.
+# Available placeholders: {id}, {kT_cut}, {include_pt}, {frac}
+out_dir: "/path/to/your/output/data_{id}{frac}"
+out_file_name_graphs: "graphs_{id}{frac}_ln_kT_cut_{kT_cut}{include_pt}"
+out_file_name_root: "data_{id}{frac}_ln_kT_cut_{kT_cut}.root"
+
+# Short label used in output filenames
+id: "dijet"
+
+# -------------------------------------------------------------------
+# Signal config reference (must point to config_signal_SRJ.yaml)
+# -------------------------------------------------------------------
+signal_config_file: "configs/config_signal_SRJ.yaml"
+signal: srj              # IMPORTANT: use srj branch logic
+signal_name_in_weight: False   # SRJ does not use weight branches
+
+# -------------------------------------------------------------------
+# Graph options
+# -------------------------------------------------------------------
+kT_cut: null        # ln(kT) threshold for node removal (null = keep all)
+include_pt: True    # Store jet pT as a graph attribute (needed for preprocessing)

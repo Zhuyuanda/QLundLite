@@ -1,0 +1,34 @@
+name: srj-training
+channels:
+  - pytorch
+  - nvidia
+  - pyg
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - pip
+
+  # PyTorch (choose the CUDA variant appropriate for your hardware)
+  # CPU-only:
+  - pytorch::pytorch>=2.0
+  - pytorch::cpuonly
+  # GPU (CUDA 12.x) — uncomment and remove cpuonly if using GPU:
+  # - pytorch::pytorch>=2.0
+  # - pytorch::pytorch-cuda=12.1
+
+  # Core scientific stack
+  - numpy>=1.24
+  - scipy>=1.10
+  - scikit-learn>=1.3
+  - matplotlib>=3.7
+  - pandas>=2.0
+  - tqdm>=4.65
+  - networkx>=3.0
+  - pyyaml>=6.0
+
+  - pip:
+    - torch-geometric>=2.4
+    - uproot>=5.0
+    - awkward>=2.0
+    # Optional: pennylane>=0.35  # for QLundNet only

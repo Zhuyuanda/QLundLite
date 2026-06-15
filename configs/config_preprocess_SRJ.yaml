@@ -1,0 +1,41 @@
+# ================================================================
+# Preprocess config for SRJ
+# Standardizes node features and optionally flattens pT/η
+# ================================================================
+
+data:
+  # Glob patterns for raw graph .pt files from Make_data_SRJ.py
+  train_graphs:
+    - "/path/to/your/output/data_dijet_part20_5.00percent/graphs_dijet_part20_5.00percent_ln_kT_cut_None_with_pt"
+
+  test_graphs:
+    - "/path/to/your/output/data_dijet_part21_5.00percent/graphs_dijet_part21_5.00percent_ln_kT_cut_None_with_pt"
+
+  # Directory where processed_SRJ_train.pt and processed_SRJ_test.pt are saved
+  out_dir: "/path/to/your/preprocessed/"
+
+  # Mean/std JSON produced by Make_data_SRJ.py for the train slice
+  meanstd_json: "/path/to/your/output/data_dijet_part20_5.00percent/slice_meanstd_part20.json"
+
+
+# ================================================================
+# Jet selection (must match the signal config)
+# ================================================================
+cut_pt_eta_mass: True
+config_signal_path: "configs/config_signal_SRJ.yaml"
+signal: srj
+
+
+# ================================================================
+# Flattening options (applied to training set only)
+# ================================================================
+flatten_pt: True
+flatten_eta: True
+n_bins_pt: 100
+n_bins_eta: 50
+
+
+# ================================================================
+# Compute resources
+# ================================================================
+num_workers: 4

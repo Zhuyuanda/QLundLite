@@ -1,0 +1,43 @@
+# ================================================================
+# Inference config for SRJ — LundNet + Combiner combined scoring
+# ================================================================
+
+# ================================================================
+# Data and output paths
+# ================================================================
+data:
+  # ROOT files with jet metadata (supports glob patterns)
+  paths_to_test_file_root:
+    - "/path/to/your/output/data_dijet_test/data_dijet_test_ln_kT_cut_None.root"
+
+  # Preprocessed graph .pt file(s) (supports glob patterns)
+  paths_to_test_file_graphs: "/path/to/your/preprocessed/processed_SRJ_test.pt"
+
+  # Output directory (supports {sample} placeholder)
+  path_to_outdir: "/path/to/your/combined_scores/{sample}/"
+
+  output_suffix: "_score_Combined"
+  sample: "test"
+  kT_cut: null
+  tree_name: "FlatSubstructureJetTree"
+
+
+# ================================================================
+# Model evaluation settings
+# ================================================================
+test:
+  lundnet_model:
+    tag: "LundNet"
+    arch: "LundNet"
+    ckpt: "/path/to/your/training_output/LundNet_dijet_ln_kT_cut_None_e050_0.XXXXX.pt"
+
+  combiner_model:
+    tag: "Combined"
+    hidden_size: 16
+    ckpt: "/path/to/your/combiner_training_output/Combiner_YYYYMMDD_HHMMSS/Combiner_e100_0.XXXXX.pt"
+
+  # parT score branch is fixed in script as: parT_score
+
+  scores_branch_name: "fjet_{tag}_score"
+
+  batch_size: 2048

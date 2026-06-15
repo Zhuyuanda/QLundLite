@@ -1,0 +1,55 @@
+# ================================================================
+# Combiner MLP training config
+# Trains a small MLP on top of LundNet + ParT scores
+# ================================================================
+
+# ================================================================
+# Data
+# ================================================================
+data:
+  # ROOT file (or directory) containing LundNet + parT scores and labels.
+  # Must contain branches: labels, fjet_LundNet_*_score, parT_score,
+  #                        fjet_Nconst, fjet_Nconst_Charged, fjet_m
+  root_dir: "/path/to/your/scores/Final_Scores_test.root"
+  root_pattern: "*.root"
+  tree_name: "FlatSubstructureJetTree"
+  label_branch: "labels"
+  score_branches:
+    - "fjet_LundNet_SRJ_score"   # adjust tag to match what you used in scoring
+    - "parT_score"
+  extra_branches:
+    - "fjet_Nconst"
+    - "fjet_Nconst_Charged"
+    - "fjet_m"
+
+# ================================================================
+# Model
+# ================================================================
+model:
+  name: "Combiner"
+  hidden_size: 16
+
+# ================================================================
+# Training
+# ================================================================
+training:
+  n_epochs: 100
+  batch_size: 4096
+  learning_rate: 0.001
+  validation_fraction: 0.1
+
+# ================================================================
+# Output
+# ================================================================
+output:
+  path_to_save: "/path/to/your/combiner_training_output/"
+  checkpoint_prefix: "Combiner"
+  save_every_epoch: true
+  val_loss_filename: "validation_losses.txt"
+
+# ================================================================
+# Computing resources
+# ================================================================
+gpu: null
+num_workers: 4
+seed: 42

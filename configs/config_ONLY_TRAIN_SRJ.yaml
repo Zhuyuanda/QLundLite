@@ -1,0 +1,57 @@
+# ================================================================
+# LundNet training config for SRJ
+# ================================================================
+
+# ================================================================
+# Data and output paths
+# ================================================================
+data:
+  # Path (or glob pattern) to preprocessed training .pt file(s)
+  path_to_trainfiles: "/path/to/your/preprocessed/processed_SRJ_train.pt"
+
+  # Directory where model checkpoints and loss files are saved
+  path_to_save: "/path/to/your/training_output/"
+
+  model_name: "LundNet_dijet_ln_kT_cut_{ln_kT_cut}"
+  adv_model_name: "adversarial"
+  ln_kT_cut: null
+
+  # Mean/std JSON (informational; not re-applied here)
+  meanstd_json: "/path/to/your/output/data_dijet_part20_5.00percent/slice_meanstd_part20.json"
+
+
+# ================================================================
+# Architecture and training
+# ================================================================
+architecture:
+  batch_size: 4096
+  test_size: 0.1          # Fraction of data used for validation
+  learning_rate: 0.0004
+  save_every_epoch: True
+
+  n_epochs: 50
+  choose_model: LundNet   # Options: LundNet, GATNet, GINNet, EdgeGinNet, PNANet, QLundNet
+
+  # Adversarial mass-decorrelation (optional)
+  do_combined_training: False
+  num_gaussians: 20
+  n_epochs_adv: 20
+  lambda_parameter: 25
+  loss_parameter: 1
+  loss_weights: [1, 1]
+  n_epochs_common: 200
+
+
+# ================================================================
+# Retraining from a checkpoint
+# ================================================================
+retrain:
+  flag: False
+  path_to_ckpt: ""
+
+
+# ================================================================
+# Computing resources
+# ================================================================
+gpu: null       # null = auto-select first available GPU; set to int (0,1,...) to pin
+num_workers: 4
